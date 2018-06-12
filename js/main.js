@@ -160,6 +160,10 @@ createRestaurantHTML = (restaurant) => {
   more.href = DBHelper.urlForRestaurant(restaurant);
   li.append(more)
 
+  // const hr = document.createElement('hr');
+  // hr.className = 'list-hr';
+  // li.append(hr);
+
   return li
 }
 
