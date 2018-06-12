@@ -58,7 +58,7 @@
     width: calc((100vw - 32px) / 2);
   }
 
-  /* ========= restaurant ========= */
+  /* ========= restaurant details ========= */
 
   .inside header {
     position: relative;
@@ -91,7 +91,7 @@
     width: 100%;
   }
 
-/*  #restaurant-container, #reviews-container {
+  #restaurant-container, #reviews-container {
     padding: 16px 0 0 0;
     width: 100%;
     margin: 0px;
@@ -120,7 +120,7 @@
     border: none;
     padding: 8px;
     width: 100%;
-  }*/
+  }
 
 }
 
@@ -258,17 +258,20 @@
 
   #restaurants-list li {
     width: calc(25% - 36px);
-    /*calc((100% - 78px) / 2);*/
     float: center;
-    /*margin: 0px 0px 8px 0px;*/
-    padding: 0px 0px 8px 0px;*/
-    /*width: 100%;*/
+    padding: 0px 0px 8px 0px;
   }
 
   #restaurants-list {
     width: 1320px;
     margin-left: auto;
-    margin-right: auto;;
+    margin-right: auto;
+  }
+
+  #maincontent {
+    width: 1320px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
 /*  #restaurants-list li {
