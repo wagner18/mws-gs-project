@@ -1,27 +1,4 @@
-/*.content {
-  display: flex;
-  flex-wrap: wrap;
-}
 
-.header__menu {
-  display: none;
-}
-
-.hero, .top-news, .scores, .weather, .recent-news {
-  order: 10;
-}*/
-
-/*.filter-options h2 {
-  margin: 0px;
-  padding: 8px;
-}
-
-.filter-options select {
-  font-size: 10pt;
-  margin: 5px;
-  padding: 0px;
-  width: calc((100vw - 24px) / 2);
-}*/
 
 #restaurants-list li h1 {
   margin-left: 8px;
@@ -35,7 +12,7 @@
   margin-left: 8px;
 }
 
-@media screen and (max-width: 679px) {
+@media screen and (max-width: 766px) {
 
   nav {
     display: flex;
@@ -84,6 +61,7 @@
     position: relative;
     right: 0;
     top: 0px;
+    margin-bottom: 24px;
   }
 
   .inside #footer {
@@ -124,7 +102,7 @@
 
 }
 
-@media screen and (min-width: 680px) {
+@media screen and (min-width: 766px) {
 
   .filter-options h2 {
     line-height: 1;
@@ -177,6 +155,7 @@
 
 @media screen and (min-width: 768px) {
 
+
   #restaurants-list {
     background-color: #f3f3f3;
     list-style: outside none none;
@@ -195,9 +174,9 @@
 
   /* ========= restaurant details ========= */
 
-  .inside #map-container {
+/*  .inside #map-container {
     height: 90vh;
-  }
+  }*/
 
   .inside #footer {
     position: relative;
@@ -245,28 +224,13 @@
 
   #restaurants-list li {
     width: calc(33.3333333% - 36px);
-    /*calc((100% - 78px) / 2);*/
     float: center;
-    /*margin: 0px 0px 8px 0px;*/
-    padding: 0px 0px 8px 0px;*/
-    /*width: 100%;*/
+    padding: 0px 0px 8px 0px;
   }
 }
 
 
 @media screen and (min-width: 1320px) {
-
-  #restaurants-list li {
-    width: calc(25% - 36px);
-    float: center;
-    padding: 0px 0px 8px 0px;
-  }
-
-  #restaurants-list {
-    width: 1320px;
-    margin-left: auto;
-    margin-right: auto;
-  }
 
   #maincontent {
     width: 1320px;
@@ -274,21 +238,12 @@
     margin-right: auto;
   }
 
-/*  #restaurants-list li {
-    width: calc(20% - 36px);
-    calc((100% - 78px) / 2);
+  #restaurants-list li {
+    width: 1320px;
+    width: calc(25% - 36px);
     float: center;
-    margin: 0px 0px 8px 0px;
     padding: 0px 0px 8px 0px;
-    width: 100%;
-  }*/
-}
-
-
-/*@media screen and (min-width: 980px) {
-  .nav, .content {
-    width: 980px;
-    margin-right: auto;
-    margin-left: auto;
   }
-}*/
+
+
+}
