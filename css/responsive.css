@@ -1,6 +1,6 @@
 
 
-#restaurants-list li h1 {
+#restaurants-list li h2 {
   margin-left: 8px;
 }
 
@@ -15,7 +15,7 @@
 @media screen and (max-width: 766px) {
 
   nav {
-    display: flex;
+    /*display: flex;*/
   }
 
   nav h1 a {
@@ -38,17 +38,14 @@
   /* ========= restaurant details ========= */
 
   .inside header {
-    position: relative;
     font-size: 0.8em;
     width: 100%;
   }
 
   #breadcrumb {
-    position: relative;
     width: 100%;
-    box-sizing: border-box;
-    padding: 8px 0px 8px 8px;
-    /*10px 24px 16px;*/
+    /*box-sizing: border-box;*/
+    padding: 8px;
   }
 
   #maincontent {
@@ -60,7 +57,7 @@
     width: 100%;
     position: relative;
     right: 0;
-    top: 0px;
+    top: 2px;
     margin-bottom: 24px;
   }
 
@@ -83,7 +80,7 @@
     padding-left: 8px;
   }
 
-  #reviews-container h2 {
+  #reviews-container h3 {
     padding-left: 8px;
   }
 
@@ -195,7 +192,7 @@
     padding-left: 8px;
   }
 
-  #reviews-container h2 {
+  #reviews-container h3 {
     padding-left: 8px;
   }
 

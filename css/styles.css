@@ -60,15 +60,16 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
 
 /* ====================== Navigation ====================== */
 nav {
-  display: inline-flex;
+  /*display: inline-flex;*/
   align-content: center;
   width: 100%;
-  height: 80px;
+  /*height: 80px;*/
   background-color: #252831;
   text-align:center;
 }
 
 nav h1 {
+  padding: 16px;
   margin: auto;
 }
 
@@ -81,12 +82,13 @@ nav h1 a {
 }
 
 #breadcrumb {
-  padding: 10px 40px 16px;
+  box-sizing: border-box;
+  padding: 14px;
   list-style: none;
   background-color: #eee;
   font-size: 17px;
   margin: 0;
-  /*width: calc(50% - 80px);*/
+  text-align: left;
 }
 
 /* Display list items side by side */
@@ -109,8 +111,8 @@ nav h1 a {
 
 /* Add a color on mouse-over */
 #breadcrumb li a:hover {
-    color: #01447e;
-    text-decoration: underline;
+  color: #01447e;
+  text-decoration: underline;
 }
 
 /* ====================== Map ====================== */
@@ -185,7 +187,7 @@ nav h1 a {
   min-width: 100%;
 }
 
-#restaurants-list li h1 {
+#restaurants-list li h2 {
   color: #f18200;
   font-family: Arial,sans-serif;
   font-size: 14pt;
@@ -216,7 +218,7 @@ nav h1 a {
 
 /* ====================== Restaurant Details ====================== */
 .inside header {
-  position: fixed;
+  position: sticky;
   top: 0;
   width: 100%;
   z-index: 1000;
@@ -228,7 +230,7 @@ nav h1 a {
   height: 100vh;
   position: sticky;
   right: 0;
-  top: 120px;
+  top: 110px;
   float: right;
 }
 
@@ -251,7 +253,7 @@ nav h1 a {
   font-size: 20pt;
   font-weight: 200;
   letter-spacing: 0;
-  margin: 15px 0 30px;
+  /*margin: 15px 0 30px;*/
   text-transform: uppercase;
   line-height: 1.1;
 }
@@ -281,8 +283,8 @@ nav h1 a {
 
 #restaurant-container, #reviews-container {
   border-bottom: 1px solid #d9d9d9;
-  border-top: 1px solid #fff;
-  padding: 140px 24px 0px;
+  /*border-top: 1px solid #fff;*/
+  /*padding: 140px 24px 0px;*/
   width: 50%;
 }
 
@@ -290,7 +292,7 @@ nav h1 a {
   padding: 30px 24px 30px;
 }
 
-#reviews-container h2 {
+#reviews-container h3 {
   color: #f58500;
   font-size: 24pt;
   font-weight: 300;
