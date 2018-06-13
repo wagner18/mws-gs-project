@@ -3,13 +3,9 @@ const CACHE_KEY = 'rreview-cache-v1';
 self.addEventListener('install', (event) => {
 
 	const urlsToCasche = [
-		'/',
-		'js/dbhelper.js',
-		'js/main.js',
-		'index.html',
-		'restaurant.html',
-		'css/styles.css',
-		'css/responsive.css',
+		'./',
+		// 'js/restaurant_info.js'
+		// 'restaurant.html',
 		'https://fonts.gstatic.com/s/roboto/v15/2UX7WLTfW3W8TclTUvlFyQ.woff',
 		'https://fonts.gstatic.com/s/roboto/v15/d-6IYplOFocCacKzxwXSOD8E0i7KZn-EPnyo3HZu7kw.woff'
 	];
