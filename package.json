@@ -1,9 +1,9 @@
 {
-  "name": "mws-gs-project1",
+  "name": "mws-gs-project",
   "version": "0.2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/wagner18/mws-gs-project1.git"
+    "url": "https://github.com/wagner18/mws-gs-project.git"
   },
   "devDependencies": {
     "grunt": "~0.4.5",
