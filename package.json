@@ -1,13 +1,30 @@
 {
   "name": "mws-gs-project",
   "version": "0.2.0",
+  "description": "",
+  "main": "index.html",
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "https://github.com/wagner18/mws-gs-project.git"
   },
   "devDependencies": {
+    "babel-core": "^6.26.3",
+    "browser-sync": "^2.24.6",
     "gulp": "^3.9.1",
-    "gulp-cli": "^2.0.1"
+    "gulp-autoprefixer": "^5.0.0",
+    "gulp-babel": "^7.0.1",
+    "gulp-cache": "^1.0.2",
+    "gulp-cli": "^2.0.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-eslint": "^5.0.0",
+    "gulp-imagemin": "^4.1.0",
+    "gulp-jasmine-phantom": "^3.0.0",
+    "gulp-sass": "^4.0.1",
+    "gulp-sourcemaps": "^2.6.4",
+    "gulp-uglify": "^3.0.1",
+    "gulp-uglify-es": "^1.0.4",
+    "imagemin-pngquant": "^6.0.0"
   },
   "dependencies": {}
 }

@@ -1,38 +1,41 @@
+@charset "utf-8";
+/* SCSS Document */
 
-
-#restaurants-list li h2 {
-  margin-left: 8px;
+#restaurants-list {
+  li {
+    h2 {
+      margin-left: 8px;
+    }
+    a {
+      margin-left: 8px;
+    }
+    p {
+      margin-left: 8px;
+    }
+  }
 }
 
-#restaurants-list li a {
-  margin-left: 8px;
-}
-
-#restaurants-list li p {
-  margin-left: 8px;
-}
 
 @media screen and (max-width: 766px) {
 
   nav {
-    /*display: flex;*/
+    h1 a {
+      font-size: 0.8em;
+    }
   }
 
-  nav h1 a {
-    font-size: 0.8em;
-  }
-
-  .filter-options h2 {
-    line-height: 1;
-    margin: 0px;
-    padding: 4px;
-  }
-
-  .filter-options select {
-    font-size: 8pt;
-    margin: 5px;
-    padding: 0px;
-    width: calc((100vw - 32px) / 2);
+  .filter-options{
+    h2 {
+      line-height: 1;
+      margin: 0px;
+      padding: 4px;
+    }
+    select {
+      font-size: 8pt;
+      margin: 5px;
+      padding: 0px;
+      width: calc((100vw - 32px) / 2);
+    }
   }
 
   /* ========= restaurant details ========= */
@@ -88,13 +91,13 @@
   #reviews-list {
     margin: 0;
     padding: 0;
-  }
-
-  #reviews-list li {
-    box-sizing: border-box;
-    border: none;
-    padding: 8px;
-    width: 100%;
+    
+    li {
+      box-sizing: border-box;
+      border: none;
+      padding: 8px;
+      width: 100%;
+    }
   }
 
 }
@@ -166,7 +169,7 @@
   #restaurants-list li {
     width: calc(50% - 36px);
     float: center;
-    padding: 0px 0px 8px 0px;*/
+    padding: 0px 0px 8px 0px;
   }
 
   /* ========= restaurant details ========= */
