@@ -83,9 +83,9 @@ nav {
 
 #breadcrumb {
   box-sizing: border-box;
-  padding: 14px;
+  padding: 12px;
   list-style: none;
-  background-color: #eee;
+  background-color: #CCCCCC;
   font-size: 17px;
   margin: 0;
   text-align: left;
@@ -190,12 +190,13 @@ nav {
 
     a {
       background-color: orange;
-      border-bottom: 3px solid #eee;
+      border: 1px solid #D56714;
+      border-radius: 5px;
       color: #fff;
       display: inline-block;
       font-size: 10pt;
       margin: 15px 0 0;
-      padding: 8px 30px 10px;
+      padding: 8px 30px 8px;
       text-align: center;
       text-decoration: none;
       text-transform: uppercase;
@@ -329,4 +330,32 @@ nav {
   td {
     color: #666;
   }
+}
+
+
+/*-------------- Snackbar -----------------*/
+#snackbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: hidden;
+  position: fixed;
+  top: 0px;
+  width: calc(100% - 40px);
+  height: 40px;
+  border-radius: 4px;
+  margin: 10px;
+  padding: 8px;
+  color: white;
+  animation: fadein 1s, fadeout 1s 5s;
+}
+
+@keyframes fadein {
+    from {top: -100px; opacity: 0;}
+    to {top: 0px; opacity: 1;}
+}
+
+@keyframes fadeout {
+    from {top: 0px; opacity: 1;}
+    to {top: -100px; opacity: 0;}
 }

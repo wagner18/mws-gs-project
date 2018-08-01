@@ -1,43 +1,102 @@
+import IDB from 'idb';
+
 /*
 * Common database helper functions.
 */
-class DBHelper {
+export default class DBHelper {
+
 	/**
 	 * Database URL.
 	 * Change this to restaurants.json file location on your server.
 	 */
-	static get DATABASE_URL() {
-		const port = 8000; // Change this to your server port
-		return `http://localhost:${port}/data/restaurants.json`;
+	get DATABASE_URL() {
+		const port = 1337; // Change this to your server port
+		return `http://localhost:${port}/restaurants`;
 	}
+
+	constructor(){
+		this._IDB = this.openDatabase();
+	}
+
+	openDatabase() {
+		if (!navigator.serviceWorker) return Promise.resolve();
+
+		return IDB.open('rreview', 1, (upgradedDB) => {
+			switch(upgradedDB.oldVersion){
+			case 0: 
+				const rreview = upgradedDB.createObjectStore('rreview', {keyPath: 'id'});
+				const index = rreview.createIndex('by-id', 'id');
+				console.log('Database and Index created');
+			}
+		});
+	}
+
+	cacheData(restaurants = []){
+		 // add post the local DB
+		this._IDB.then(db => {
+			if (!db) return;
+
+			const tx = db.transaction('rreview', 'readwrite');
+			const readwriteStore = tx.objectStore('rreview');
+			restaurants.forEach((restaurant) => readwriteStore.put(restaurant));
+			tx.complete.then(() => console.log('post added to indexedDB'));
+		});
+	}
+
+	/**
+ * Load data from the client database.
+ */
+	loadCache() {
+		return this._IDB.then(db => {
+			if (!db) return;
+			return db.transaction('rreview')
+				.objectStore('rreview')
+				.index('by-id')
+				.getAll();
+		}).then(rreview => rreview);
+	};
+
+	/** TODO
+	* Implement Socket to load real times database loads
+	*/
+
 	/**
 	 * Fetch all restaurants.
 	 */
-	static fetchRestaurants(callback) {
-		let xhr = new XMLHttpRequest();
-		xhr.open('GET', DBHelper.DATABASE_URL);
-		xhr.onload = () => {
-			if (xhr.status === 200) { // Got a success response from server!
-				const json = JSON.parse(xhr.responseText);
-				const restaurants = json.restaurants;
-				callback(null, restaurants);
-			} else { // Oops!. Got an error from server.
-				const error = (`Request failed. Returned status of ${xhr.status}`);
-				callback(error, null);
+	fetchRestaurants(callback) {
+		this.loadCache().then(data => {
+			if(data.length > 0) {
+				callback(null, data);
+			} else {
+
+				fetch(this.DATABASE_URL).then(response => {
+					if (response.status === 200) {
+						response.json().then(data => {
+							this.cacheData(data);
+							callback(null, data);
+							console.log('data loaded from local storage!');
+						});
+					} else {
+						callback(this.handleResponseError(response, 'api request'), null);
+					}
+				}).catch(error => callback(error, null));
+
 			}
-		};
-		xhr.send();
+		});
 	}
 	/**
 	 * Fetch a restaurant by its ID.
 	 */
-	static fetchRestaurantById(id, callback) {
+	fetchRestaurantById(id, callback) {
 		// fetch all restaurants with proper error handling.
-		DBHelper.fetchRestaurants((error, restaurants) => {
+		this.fetchRestaurants((error, restaurants) => {
+
 			if (error) {
 				callback(error, null);
 			} else {
+
 				const restaurant = restaurants.find(r => r.id == id);
+
 				if (restaurant) { // Got the restaurant
 					callback(null, restaurant);
 				} else { // Restaurant does not exist in the database
@@ -49,9 +108,9 @@ class DBHelper {
 	/**
 	 * Fetch restaurants by a cuisine type with proper error handling.
 	 */
-	static fetchRestaurantByCuisine(cuisine, callback) {
+	fetchRestaurantByCuisine(cuisine, callback) {
 		// Fetch all restaurants	with proper error handling
-		DBHelper.fetchRestaurants((error, restaurants) => {
+		this.fetchRestaurants((error, restaurants) => {
 			if (error) {
 				callback(error, null);
 			} else {
@@ -64,9 +123,9 @@ class DBHelper {
 	/**
 	 * Fetch restaurants by a neighborhood with proper error handling.
 	 */
-	static fetchRestaurantByNeighborhood(neighborhood, callback) {
+	fetchRestaurantByNeighborhood(neighborhood, callback) {
 		// Fetch all restaurants
-		DBHelper.fetchRestaurants((error, restaurants) => {
+		this.fetchRestaurants((error, restaurants) => {
 			if (error) {
 				callback(error, null);
 			} else {
@@ -79,9 +138,9 @@ class DBHelper {
 	/**
 	 * Fetch restaurants by a cuisine and a neighborhood with proper error handling.
 	 */
-	static fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, callback) {
+	fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, callback) {
 		// Fetch all restaurants
-		DBHelper.fetchRestaurants((error, restaurants) => {
+		this.fetchRestaurants((error, restaurants) => {
 			if (error) {
 				callback(error, null);
 			} else {
@@ -99,9 +158,9 @@ class DBHelper {
 	/**
 	 * Fetch all neighborhoods with proper error handling.
 	 */
-	static fetchNeighborhoods(callback) {
+	fetchNeighborhoods(callback) {
 		// Fetch all restaurants
-		DBHelper.fetchRestaurants((error, restaurants) => {
+		this.fetchRestaurants((error, restaurants) => {
 			if (error) {
 				callback(error, null);
 			} else {
@@ -116,9 +175,9 @@ class DBHelper {
 	/**
 	 * Fetch all cuisines with proper error handling.
 	 */
-	static fetchCuisines(callback) {
+	fetchCuisines(callback) {
 		// Fetch all restaurants
-		DBHelper.fetchRestaurants((error, restaurants) => {
+		this.fetchRestaurants((error, restaurants) => {
 			if (error) {
 				callback(error, null);
 			} else {
@@ -133,27 +192,39 @@ class DBHelper {
 	/**
 	 * Restaurant page URL.
 	 */
-	static urlForRestaurant(restaurant) {
+	urlForRestaurant(restaurant) {
 		return (`./restaurant.html?id=${restaurant.id}`);
 	}
 	/**
 	 * Restaurant image URL.
 	 */
-	static imageUrlForRestaurant(restaurant, size) {
+	imageUrlForRestaurant(restaurant, size) {
 		let img = restaurant.photograph;
-		return (`/img_resp/${img.slice(0, -4)}-${size}${img.slice(-4)}`);
+		return img ? (`/img/${img}-${size}.jpg`) : '/img/restaurant_placeholder.svg';
 	}
 	/**
 	 * Map marker for a restaurant.
 	 */
-	static mapMarkerForRestaurant(restaurant, map) {
+	mapMarkerForRestaurant(restaurant, map) {
 		const marker = new google.maps.Marker({
 			position: restaurant.latlng,
 			title: restaurant.name,
-			url: DBHelper.urlForRestaurant(restaurant),
+			url: this.urlForRestaurant(restaurant),
 			map: map,
 			animation: google.maps.Animation.DROP}
 		);
 		return marker;
 	}
+
+	handleResponseError(response, type){
+		switch (response.status) {
+			case 400:
+				return new Error('Bed request');
+			case 404:
+				return new Error('Not found');
+			case 500: 
+				return new Error('Internal server error');
+		}
+	}
+
 }

@@ -1,7 +1,10 @@
 /*eslint-env node*/
-
+const browserify = require('browserify');
+const babelify = require('babelify');
+const buffer = require('vinyl-buffer');
+const source = require('vinyl-source-stream');
 const gulp = require('gulp');
-const babel = require('gulp-babel');
+// const babel = require('gulp-babel');
 const sourcemaps = require('gulp-sourcemaps');
 const eslint = require('gulp-eslint');
 const cache = require('gulp-cache');
@@ -16,18 +19,19 @@ const pngquant = require('imagemin-pngquant');
 
 //import gulp from 'gulp';
 
-gulp.task('default', ['linter', 'clearCache', 'copy-data', 'copy-html', 'images', 'scripts', 'styles'], () => {
-
-	gulp.watch(['sass/**/*.{scss,css}'], ['styles']);
-	gulp.watch('js/**/*.js', ['linter']);
-	gulp.watch('/index.html', ['copy-html']);
-	gulp.watch('dist/index.html').on('change', BrowserSync.reload);
-	gulp.watch('dist/css/**/*.css').on('change', BrowserSync.reload);
+gulp.task('default', ['linter', 'clearCache', 'build', 'copy-html', 'images', 'styles'], () => {
 
 	BrowserSync.init({
 		server: './dist',
 		port: 8000
 	});
+
+	gulp.watch(['sass/**/*.{scss,css}'], ['styles']);
+	gulp.watch('/index.html', ['copy-html']);
+	gulp.watch('js/**/*.js', ['linter', 'build']).on('change', BrowserSync.reload);
+	gulp.watch('dist/index.html').on('change', BrowserSync.reload);
+	gulp.watch('dist/css/**/*.css').on('change', BrowserSync.reload);
+
 });
 
 gulp.task('dist', [
@@ -38,25 +42,66 @@ gulp.task('dist', [
 	'scripts-dist'
 ]);
 
-gulp.task('scripts', () => {
-	gulp.src('js/**/*.js')
-		.pipe(sourcemaps.init())
-		.pipe(babel())
-		.pipe(concat('all.js'))
-		.pipe(sourcemaps.write())
-		.pipe(gulp.dest('./dist/js'));
-});
+// gulp.task('scripts', () => {
 
-gulp.task('scripts-dist', () => {
-	gulp.src('js/**/*.js')
-		.pipe(babel())
-		.pipe(concat('all.js'))
+// 	gulp.src('js/sw/index.js')
+// 		.pipe(concat('sw.js'))
+// 		.pipe(gulp.dest('dist/js'));
+
+// 	// gulp.src('js/*.js')
+// 	// 	.pipe(sourcemaps.init())
+// 	// 	.pipe(babel({
+// 	// 		presets: ['env']
+// 	// 	}))
+// 	// 	// .pipe(concat('app.js'))
+// 	// 	.pipe(uglify())
+// 	// 	.pipe(sourcemaps.write('./'))
+// 	// 	.pipe(gulp.dest('dist/js'));
+
+// 	// const b = browserify({ 
+// 	// 	entries: 'js/main.js',
+// 	// 	debug: true 
+// 	// }).transform(babel.configure({
+// 	// 	presets: ['es2015']
+// 	// }));
+
+// 	// return b.bundle()
+// 	// 	.pipe(source('js/main.js'))
+// 	// 	.pipe(sourcemaps.init())
+// 	// 	.pipe(uglify())
+// 	// 	.pipe(rename('bundle.js'))
+// 	// 	.pipe(sourcemaps.write('./'))
+// 	// 	.pipe(gulp.dest('dist/js'));
+
+// });
+
+
+function transpile(file) {
+	return browserify({
+		entries: `./js/${file}`, 
+		debug: true
+	})
+		.transform('babelify', { presets: ['env'] })
+		.bundle()
+		.pipe(source(file))
+		.pipe(buffer())
+		.pipe(sourcemaps.init())
 		.pipe(uglify())
-		.pipe(gulp.dest('dist/js'));
+		.pipe(sourcemaps.write('./'))
+		.pipe(gulp.dest('./dist/js'));
+}
+
+gulp.task('build', () => {
+	gulp.src('js/sw/index.js')
+		.pipe(concat('sw.js'))
+		.pipe(gulp.dest('dist/'));
+
+	transpile('main.js');
+	transpile('restaurant_info.js');
 });
 
 gulp.task('copy-html', () => {
-	gulp.src('./index.html')
+	gulp.src('./*.html')
 		.pipe(gulp.dest('dist'));
 });
 
@@ -67,7 +112,7 @@ gulp.task('images', () => {
 			progressive: true,
 			use: [pngquant()]
 		}))
-		.pipe(gulp.dest('dist/img_resp'));
+		.pipe(gulp.dest('dist/img'));
 });
 
 gulp.task('styles', () => {
@@ -102,11 +147,29 @@ gulp.task('tests', () => {
 		}));
 });
 
+gulp.task('scripts-prod', () => {
+	gulp.src('js/*.js')
+		.pipe(babel({
+			presets: ['env']
+		}))
+		.pipe(concat('all.js'))
+		.pipe(uglify())
+		.pipe(gulp.dest('dist/js'));
+
+	gulp.src('js/sw/index.js')
+		.pipe(babel({
+			presets: ['env']
+		}))
+		.pipe(concat('sw.js'))
+		.pipe(uglify())
+		.pipe(gulp.dest('./dist/js'));
+});
+
 // const watcher = gulp.watch('sass/**/*.scss', ['default', 'styles']);
 // watcher.on('change', (event) => {
 // 	console.log(`File ${event.path} was updated - Running tasks`);
 // });
 
-// gulp.task("autoprefix", () => {
+// gulp.task('autoprefix', () => {
 
 // });
