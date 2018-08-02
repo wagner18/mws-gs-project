@@ -15,7 +15,6 @@ self.addEventListener('install', (event) => {
 		'/css/responsive.css',
 		'/css/styles.css',
 		'https://fonts.gstatic.com/s/roboto/v15/2UX7WLTfW3W8TclTUvlFyQ.woff',
-		'https://normalize-css.googlecode.com/svn/trunk/normalize.min.css',
 	];
 
 	event.waitUntil(
