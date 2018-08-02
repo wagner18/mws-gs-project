@@ -15,8 +15,7 @@ self.addEventListener('install', (event) => {
 		'/css/responsive.css',
 		'/css/styles.css',
 		'https://fonts.gstatic.com/s/roboto/v15/2UX7WLTfW3W8TclTUvlFyQ.woff',
-		// 'https://normalize-css.googlecode.com/svn/trunk/normalize.min.css',
-		// 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCAGI5xQ4PXUpi6HNhM7fwIVzSzTVVJz5E&libraries=places&callback=initMap'
+		'https://normalize-css.googlecode.com/svn/trunk/normalize.min.css',
 	];
 
 	event.waitUntil(

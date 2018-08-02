@@ -14,7 +14,6 @@ const concat = require('gulp-concat');
 const uglify = require('gulp-uglify-es').default;
 const jasmine = require('gulp-jasmine-phantom');
 const imagemin = require('gulp-imagemin');
-const pngquant = require('imagemin-pngquant');
 
 //import gulp from 'gulp';
 
@@ -40,40 +39,6 @@ gulp.task('dist', [
 	'linter',
 	'scripts-dist'
 ]);
-
-// gulp.task('scripts', () => {
-
-// 	gulp.src('js/sw/index.js')
-// 		.pipe(concat('sw.js'))
-// 		.pipe(gulp.dest('dist/js'));
-
-// 	// gulp.src('js/*.js')
-// 	// 	.pipe(sourcemaps.init())
-// 	// 	.pipe(babel({
-// 	// 		presets: ['env']
-// 	// 	}))
-// 	// 	// .pipe(concat('app.js'))
-// 	// 	.pipe(uglify())
-// 	// 	.pipe(sourcemaps.write('./'))
-// 	// 	.pipe(gulp.dest('dist/js'));
-
-// 	// const b = browserify({ 
-// 	// 	entries: 'js/main.js',
-// 	// 	debug: true 
-// 	// }).transform(babel.configure({
-// 	// 	presets: ['es2015']
-// 	// }));
-
-// 	// return b.bundle()
-// 	// 	.pipe(source('js/main.js'))
-// 	// 	.pipe(sourcemaps.init())
-// 	// 	.pipe(uglify())
-// 	// 	.pipe(rename('bundle.js'))
-// 	// 	.pipe(sourcemaps.write('./'))
-// 	// 	.pipe(gulp.dest('dist/js'));
-
-// });
-
 
 function transpile(file) {
 	return browserify({
@@ -113,7 +78,7 @@ gulp.task('images', () => {
 		.pipe(imagemin([
 			imagemin.gifsicle({interlaced: true}),
 			imagemin.jpegtran({progressive: true}),
-			imagemin.optipng({optimizationLevel: 5}),
+			imagemin.optipng({optimizationLevel: 6}),
 			imagemin.svgo({
 				plugins: [
 					{removeViewBox: true},

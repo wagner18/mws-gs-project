@@ -4,15 +4,9 @@ import DBHelper from './dbhelper';
 var map;
 
 export function Main() {
-	// let restaurants,neighborhoods, cuisines;
-	// this.markers = [];
-
 	this.controller = new MainController(document.querySelector('#app-main'));
-
 	this.controller.fetchNeighborhoods();
 	this.controller.fetchCuisines();
-
-	// document.addEventListener('touchstart', onTouchStart, {passive: true});
 }
 
 Main.prototype.updateRestaurants = function() {
