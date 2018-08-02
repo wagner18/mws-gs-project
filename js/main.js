@@ -12,22 +12,7 @@ export function Main() {
 	this.controller.fetchNeighborhoods();
 	this.controller.fetchCuisines();
 
-	/**
-	* Initialize Google map, called from HTML.
-	*/
-	window.initMap = () => {
-		let loc = {
-			lat: 40.722216,
-			lng: -73.987501
-		};
-		self.map = new google.maps.Map(document.getElementById('map'), {
-			zoom: 12,
-			center: loc,
-			scrollwheel: false
-		});
-		this.updateRestaurants();
-	};
-
+	// document.addEventListener('touchstart', onTouchStart, {passive: true});
 }
 
 Main.prototype.updateRestaurants = function() {
@@ -44,9 +29,23 @@ Main.prototype.updateRestaurants = function() {
 	this.controller.fetchRestaurants(cuisine, neighborhood);
 };
 
+window.main = new Main();
 
 document.addEventListener('DOMContentLoaded', (event) => {
-	window.main = new Main();
+	/**
+	* Initialize Google map, called from HTML.
+	*/
+	window.initMap = () => {
+		let loc = {
+			lat: 40.722216,
+			lng: -73.987501
+		};
+		self.map = new google.maps.Map(document.getElementById('map'), {
+			zoom: 12,
+			center: loc,
+			scrollwheel: false
+		});
+		self.main.updateRestaurants();
+	};
 });
-
 

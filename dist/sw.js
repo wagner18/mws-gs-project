@@ -5,6 +5,8 @@ const allCaches = [ CACHE_KEY, CACHE_IMGS ];
 self.addEventListener('install', (event) => {
 
 	const toCache = [
+		'/',
+		'/manifest.json',
 		'/index.html',
 		'/restaurant.html',
 		'/js/main.js',
@@ -13,44 +15,25 @@ self.addEventListener('install', (event) => {
 		'/css/responsive.css',
 		'/css/styles.css',
 		'https://fonts.gstatic.com/s/roboto/v15/2UX7WLTfW3W8TclTUvlFyQ.woff',
-		'https://fonts.gstatic.com/s/roboto/v15/d-6IYplOFocCacKzxwXSOD8E0i7KZn-EPnyo3HZu7kw.woff',
+		// 'https://normalize-css.googlecode.com/svn/trunk/normalize.min.css',
 		// 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCAGI5xQ4PXUpi6HNhM7fwIVzSzTVVJz5E&libraries=places&callback=initMap'
 	];
 
 	event.waitUntil(
 		caches.open(CACHE_KEY).then((cache) => cache.addAll(toCache)).catch((err) => {
-			console.log('Caching failed - ', err);
+			console.erro('Caching failed - ', err);
 		})
 	);
 });
 
-
-// self.addEventListener('activate', (event) => {
-// 	event.waitUntil(
-// 		// Delete the old cache
-// 		caches.keys().then((keys) => { 
-// 			return Promise.all(keys.map((key) => {
-// 				if(key.startsWith('rreview-') && !allCaches.includes(key)){
-// 					caches.delete(key);
-// 				}
-// 			}));
-// 		})
-// 	);
-// });
-
-// self.addEventListener('message', (event) => {
-// 	if (event.data.action === 'refresh') self.skipWaiting();
-// });
 
 self.addEventListener('fetch', (event) => {
 
 	const requestURL = new URL(event.request.url);
 
 	if (requestURL.origin === location.origin) {
-
 		if (requestURL.pathname.startsWith('/restaurant')) {
-			console.log(requestURL);
-			event.respondWith(caches.match(event.request).then((response) => response));
+			event.respondWith(caches.match(requestURL.pathname).then((response) => response));
 			return;
 		}
 
@@ -61,7 +44,9 @@ self.addEventListener('fetch', (event) => {
 	}
 
 	event.respondWith(
-		caches.match(event.request).then((response) => response || fetch(event.request))
+		caches.match(event.request).then((response) => {
+			return response || fetch(event.request);
+		})
 	);
 
 });

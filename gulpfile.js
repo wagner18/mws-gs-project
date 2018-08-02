@@ -4,7 +4,6 @@ const babelify = require('babelify');
 const buffer = require('vinyl-buffer');
 const source = require('vinyl-source-stream');
 const gulp = require('gulp');
-// const babel = require('gulp-babel');
 const sourcemaps = require('gulp-sourcemaps');
 const eslint = require('gulp-eslint');
 const cache = require('gulp-cache');
@@ -96,6 +95,9 @@ gulp.task('build', () => {
 		.pipe(concat('sw.js'))
 		.pipe(gulp.dest('dist/'));
 
+	gulp.src('manifest.json')
+		.pipe(gulp.dest('dist/'));
+
 	transpile('main.js');
 	transpile('restaurant_info.js');
 });
@@ -108,10 +110,17 @@ gulp.task('copy-html', () => {
 gulp.task('images', () => {
 	gulp.src('img_resp/**/*')
 		// Set image resizing (1x 2x ratio) 
-		.pipe(imagemin({
-			progressive: true,
-			use: [pngquant()]
-		}))
+		.pipe(imagemin([
+			imagemin.gifsicle({interlaced: true}),
+			imagemin.jpegtran({progressive: true}),
+			imagemin.optipng({optimizationLevel: 5}),
+			imagemin.svgo({
+				plugins: [
+					{removeViewBox: true},
+					{cleanupIDs: false}
+				]
+			})
+		]))
 		.pipe(gulp.dest('dist/img'));
 });
 

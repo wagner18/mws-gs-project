@@ -15,8 +15,8 @@ export default class Util {
 		}
 
 		el.innerHTML = message;
-		el.style.visibility = 'visible';
+		el.setAttribute('class', 'show');
 		el.style.background = color;
-		setTimeout(() => { el.style.visibility = 'hidden'; }, 5500);
+		setTimeout(() => { el.removeAttribute('class') }, 5500);
 	}
 }

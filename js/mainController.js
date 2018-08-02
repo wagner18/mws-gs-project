@@ -3,14 +3,13 @@ import Util from './util';
 
 
 export default function MainController(container) {
-
-	// let restaurants,neighborhoods, cuisines;
-
 	this.markers = [];
 	this._container = container;
 	this._registerServiceWorker();
 
 	this.db = new DBHelper();
+
+	if (navigator) checkConnection();
 }
 
 MainController.prototype._registerServiceWorker = function() {
@@ -19,16 +18,12 @@ MainController.prototype._registerServiceWorker = function() {
 
 		if (navigator.serviceWorker.controller) return;
 
-		navigator.serviceWorker.register('/sw.js', {scope: ''}).then((swReg) => {
+		navigator.serviceWorker.register('/sw.js', {scope: '/'}).then((swReg) => {
 			console.log('\nServiceWorker successfully registred. Scope\n', swReg.scope);
 		}).catch((err) => {
 			console.log('\nServiceWorker swReg failed :(\n', err.message);
 		});
 
-	  // check connetion every 5 seconds
-	  const checkConnection = setTimeout(() => {
-	    if(!navigator.onLine) handleError(new Error('No Connection'));
-	  }, 5000);
 	}
 };
 
@@ -139,7 +134,7 @@ MainController.prototype.createRestaurantHTML = function(restaurant) {
 	image.className = 'restaurant-img';
 	image.src = this.db.imageUrlForRestaurant(restaurant, 600);
 	image.alt = `Photo of ${restaurant.name} restaurant`;
-	image.srcset = `${this.db.imageUrlForRestaurant(restaurant, 1200)} 1200w, ${this.db.imageUrlForRestaurant(restaurant, 600)} 600w`;
+	// image.srcset = `${this.db.imageUrlForRestaurant(restaurant, 1200)} 1200w, ${this.db.imageUrlForRestaurant(restaurant, 600)} 600w`;
 
 	li.append(image);
 
@@ -160,10 +155,6 @@ MainController.prototype.createRestaurantHTML = function(restaurant) {
 	more.href = this.db.urlForRestaurant(restaurant);
 	li.append(more);
 
-	// const hr = document.createElement('hr');
-	// hr.className = 'list-hr';
-	// li.append(hr);
-
 	return li;
 };
 
@@ -180,6 +171,14 @@ MainController.prototype.addMarkersToMap = function(restaurants = this.restauran
 		this.markers.push(marker);
 	});
 };
+
+function checkConnection() {
+	if(!navigator.onLine) handleError(new Error('No Connection'));
+	// check connetion every 5 seconds
+	const checkTimeout = setTimeout(() => {
+		checkConnection();
+  }, 10000);
+}
 
 function handleError(error) {
 	Util.snackbar(document.querySelector('#snackbar'), error.message);
