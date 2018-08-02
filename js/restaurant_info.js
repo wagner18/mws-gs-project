@@ -3,10 +3,8 @@ import DBHelper from './dbhelper';
 export default class RestaurantInfo {
 
 	constructor() {
-
 		this.map = null;
 		this.restaurant = null;
-
 		this.db = new DBHelper();
 
 		/**
@@ -176,6 +174,5 @@ export default class RestaurantInfo {
 
 }
 
-document.addEventListener('DOMContentLoaded', (event) => {
-	window.restaurantInfo = new RestaurantInfo();
-});
+window.restaurantInfo = new RestaurantInfo();
+
