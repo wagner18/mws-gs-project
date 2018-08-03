@@ -11,9 +11,10 @@ self.addEventListener('install', (event) => {
 		'/restaurant.html',
 		'/js/main.js',
 		'/js/restaurant_info.js',
-		'/css/main.css',
-		'/css/responsive.css',
 		'/css/styles.css',
+		'/css/small-screen.css',
+		'/css/medium-screen.css',
+		'/css/large-screen.css',
 		'https://fonts.gstatic.com/s/roboto/v15/2UX7WLTfW3W8TclTUvlFyQ.woff',
 	];
 

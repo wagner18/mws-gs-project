@@ -7,36 +7,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link media="screen" rel="manifest" href="/manifest.json">
-  <link media="screen" rel="stylesheet" href="css/styles.css" type="text/css">
-  <link media="screen" rel="stylesheet" href="css/responsive.css">
+  
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/small-screen.css" media="(max-width: 765px)">
+  <link rel="stylesheet" href="css/medium-screen.css" media="(min-width: 766px)">
+  <link rel="stylesheet" href="css/large-scren.css" media="(min-width: 1024px)">
   
   <title>Restaurant Info</title>
 </head>
 
 <body class="inside">
-  <!-- Beginning header -->
   <header>
-    <!-- Beginning nav -->
     <nav>
       <h1><a href="/">Restaurant Reviews</a></h1>
-      <!-- Beginning breadcrumb -->
       <ul id="breadcrumb" aria-label="Breadcrumb">
         <li><a href="/">Home</a></li>
       </ul>
-      <!-- End breadcrumb -->
     </nav>
-    <!-- End nav -->
   </header>
-  <!-- End header -->
 
-  <!-- Beginning main -->
   <main id="maincontent">
-    <!-- Beginning map -->
+
     <section id="map-container" tabindex="-1">
       <div id="map" tabindex="-1" role='application' aria-label="Google Maps"></div>
     </section>
-    <!-- End map -->
-    <!-- Beginning restaurant -->
+
     <section id="restaurant-container">
       <h2 id="restaurant-name"></h2>
       <img id="restaurant-img">
@@ -44,24 +39,20 @@
       <p id="restaurant-address"></p>
       <table id="restaurant-hours"></table>
     </section>
-    <!-- end restaurant -->
-    <!-- Beginning reviews -->
+
     <section id="reviews-container">
       <ul id="reviews-list"></ul>
     </section>
-    <!-- End reviews -->
-  </main>
-  <!-- End main -->
 
-  <!-- Beginning footer -->
+  </main>
+
   <footer id="footer">
     Copyright (c) 2017 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
   </footer>
 
   <script defer type="text/javascript" src="js/restaurant_info.js"></script> 
-  <!-- Google Maps -->
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCAGI5xQ4PXUpi6HNhM7fwIVzSzTVVJz5E&libraries=places&callback=initMap"></script>
-  <!-- End scripts -->
+
 
 </body>
 

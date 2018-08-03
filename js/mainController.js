@@ -13,9 +13,7 @@ export default function MainController(container) {
 }
 
 MainController.prototype._registerServiceWorker = function() {
-
 	if (navigator.serviceWorker) {
-
 		if (navigator.serviceWorker.controller) return;
 
 		navigator.serviceWorker.register('/sw.js', {scope: '/'}).then((swReg) => {
@@ -119,6 +117,8 @@ MainController.prototype.fillRestaurantsHTML = function(restaurants = this.resta
 	restaurants.forEach(restaurant => {
 		ul.append(this.createRestaurantHTML(restaurant));
 	});
+
+	Util.imgLazyLoader('.img-lazy-load');
 	this.addMarkersToMap();
 };
 
@@ -131,10 +131,9 @@ MainController.prototype.createRestaurantHTML = function(restaurant) {
 	li.setAttribute('aria-label', `${restaurant.name} - ${restaurant.cuisine_type} - ${restaurant.address}`);
 
 	const image = document.createElement('img');
-	image.className = 'restaurant-img';
-	image.src = this.db.imageUrlForRestaurant(restaurant, 600);
-	image.alt = `Photo of ${restaurant.name} restaurant`;
-	// image.srcset = `${this.db.imageUrlForRestaurant(restaurant, 1200)} 1200w, ${this.db.imageUrlForRestaurant(restaurant, 600)} 600w`;
+	image.className = 'img-lazy-load restaurant-img';
+	image.setAttribute('data-src', this.db.imageUrlForRestaurant(restaurant, 600));
+	image.alt = `${restaurant.name} - ${restaurant.cuisine_type} Cuisine`;
 
 	li.append(image);
 
@@ -172,6 +171,7 @@ MainController.prototype.addMarkersToMap = function(restaurants = this.restauran
 	});
 };
 
+
 function checkConnection() {
 	if(!navigator.onLine) handleError(new Error('No Connection'));
 	// check connetion every 5 seconds
@@ -183,3 +183,4 @@ function checkConnection() {
 function handleError(error) {
 	Util.snackbar(document.querySelector('#snackbar'), error.message);
 }
+

@@ -1,0 +1,1 @@
+@media screen and (min-width: 1024px){#restaurants-list li{width:calc(33.3333333% - 36px);float:center;padding:0px 0px 8px 0px}}@media screen and (min-width: 1320px){#maincontent{width:1320px;margin-left:auto;margin-right:auto}#restaurants-list li{width:1320px;width:calc(25% - 36px);float:center;padding:0px 0px 8px 0px}}

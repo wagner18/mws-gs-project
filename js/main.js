@@ -1,5 +1,4 @@
 import MainController from './mainController';
-import DBHelper from './dbhelper';
 
 var map;
 
@@ -40,8 +39,4 @@ Main.prototype.updateRestaurants = function() {
 };
 
 window.main = new Main();
-
-// document.addEventListener('DOMContentLoaded', (event) => {
-
-// });
 
