@@ -25,64 +25,6 @@
 
   /* ========= restaurant details ========= */
 
-  .inside header {
-    font-size: 0.8em;
-    width: 100%;
-  }
-
-  #breadcrumb {
-    width: 100%;
-    /*box-sizing: border-box;*/
-    padding: 8px;
-  }
-
-  #maincontent {
-    width: 100%;
-  }
-
-  .inside #map-container {
-    height: 85vh;
-    width: 100%;
-    position: relative;
-    right: 0;
-    top: 2px;
-    margin-bottom: 24px;
-  }
-
-  .inside #footer {
-    position: relative;
-    width: 100%;
-  }
-
-  #restaurant-container, #reviews-container {
-    padding: 16px 0 0 0;
-    width: 100%;
-    margin: 0px;
-  }
-
-  #restaurant-img, #restaurant-cuisine {
-    width: 100%;
-  }
-
-  #restaurant-hours, #restaurant-address, #restaurant-name {
-    padding-left: 8px;
-  }
-
-  #reviews-container h3 {
-    padding-left: 8px;
-  }
-
-  #reviews-list {
-    margin: 0;
-    padding: 0;
-    
-    li {
-      box-sizing: border-box;
-      border: none;
-      padding: 8px;
-      width: 100%;
-    }
-  }
 
   #restaurants-list {
     background-color: #f3f3f3;
@@ -108,10 +50,78 @@
       background-color: #ccc;
       display: block;
       margin: 0;
-      max-width: 100%;
+      width: 100%;
       min-height: 248px;
-      min-width: 100%;
     }
+
+  }
+
+  .inside {
+    header {
+      font-size: 0.8em;
+      width: 100%;
+    }
+
+    #breadcrumb {
+      width: 100%;
+      /*box-sizing: border-box;*/
+      padding: 8px;
+    }
+
+    #maincontent {
+      width: 100%;
+    }
+
+    #map-container {
+      height: 400px;
+      width: 100%;
+      position: relative;
+      left: 0;
+      top: 8px;
+      margin-top: 16px;
+      margin-bottom: 8px;
+      border: 1px solid #ccc;
+    }
+
+    #footer {
+      position: relative;
+      width: 100%;
+    }
+
+    #restaurant-container, #reviews-container {
+      width: 100%;
+      padding: 0;
+      margin: 0;
+    }
+
+    #restaurant-img, #restaurant-cuisine {
+      width: 100%;
+    }
+
+    #restaurant-hours, #restaurant-address, #restaurant-name {
+      padding-left: 8px;
+    }
+
+    #restaurant-hours {
+      margin: 0px;
+      width: calc(100% - 8px);
+    }
+
+    #reviews-container h3 {
+      padding-left: 8px;
+    }
+
+    #reviews-list {
+      margin: 0;
+      padding: 0;
+      
+      li {
+        border-radius: 5px;
+        border: none;
+        padding: 8px;
+      }
+    }
+
 
   }
 

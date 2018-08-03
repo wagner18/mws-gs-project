@@ -141,6 +141,11 @@ MainController.prototype.createRestaurantHTML = function(restaurant) {
 	name.innerHTML = restaurant.name;
 	li.append(name);
 
+	const cuisine = document.createElement('p');
+	cuisine.className = 'cuisine-type';
+	cuisine.innerHTML = restaurant.cuisine_type;
+	li.append(cuisine);
+
 	const neighborhood = document.createElement('p');
 	neighborhood.innerHTML = restaurant.neighborhood;
 	li.append(neighborhood);
@@ -153,6 +158,11 @@ MainController.prototype.createRestaurantHTML = function(restaurant) {
 	more.innerHTML = 'View Details';
 	more.href = this.db.urlForRestaurant(restaurant);
 	li.append(more);
+
+	// const share = document.createElement('a');
+	// share.innerHTML = 'Share';
+	// share.href = this.db.urlForRestaurant(restaurant);
+	// li.append(share);
 
 	return li;
 };

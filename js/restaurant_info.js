@@ -64,8 +64,8 @@ export default class RestaurantInfo {
 		const image = document.getElementById('restaurant-img');
 		image.className = 'restaurant-img';
 		image.src = this.db.imageUrlForRestaurant(restaurant, 600);
-		image.alt = `Photo of ${restaurant.name} restaurant`;
-		image.srcset = `${this.db.imageUrlForRestaurant(restaurant, 1200)} 1200w, ${this.db.imageUrlForRestaurant(restaurant, 600)} 600w`;
+		image.alt = `${restaurant.name} - ${restaurant.cuisine_type} Cuisine`;
+		image.srcset = `${this.db.imageUrlForRestaurant(restaurant, 1200)} 600w, ${this.db.imageUrlForRestaurant(restaurant, 600)} 400w`;
 
 		const cuisine = document.getElementById('restaurant-cuisine');
 		cuisine.innerHTML = restaurant.cuisine_type;
