@@ -102,9 +102,18 @@
       padding-left: 8px;
     }
 
+
+    #restaurant-address {
+      font-size: 12pt;
+    }
+
     #restaurant-hours {
       margin: 0px;
       width: calc(100% - 8px);
+
+      td,th {
+        font-size: 10pt;
+      }
     }
 
     #reviews-container h3 {
