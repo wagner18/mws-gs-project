@@ -10,21 +10,34 @@ export default class RestaurantInfo {
 		/**
 		 * Initialize Google map, called from HTML.
 		 */
-		window.initMap = () => {
-			this.fetchRestaurantFromURL((error, restaurant) => {
-				if (error) { // Got an error!
-					console.log(error);
-				} else {
-					this.map = new google.maps.Map(document.getElementById('map'), {
-						zoom: 16,
-						center: restaurant.latlng,
-						scrollwheel: false
-					});
-					this.fillBreadcrumb();
-					this.db.mapMarkerForRestaurant(this.restaurant, this.map);
-				}
-			});
-		};
+
+		window.addEventListener('load', (e) => {
+			console.log('All resources finished loading!');
+
+			const script = document.createElement('script');
+			script.setAttribute('async', true);
+			script.setAttribute('defer', true);
+			script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCAGI5xQ4PXUpi6HNhM7fwIVzSzTVVJz5E&libraries=places&callback=initMap';
+			document.querySelector('.inside').appendChild(script);
+
+  		window.initMap = () => {
+				this.fetchRestaurantFromURL((error, restaurant) => {
+					if (error) { // Got an error!
+						console.log(error);
+					} else {
+						this.map = new google.maps.Map(document.getElementById('map'), {
+							zoom: 16,
+							center: restaurant.latlng,
+							scrollwheel: false
+						});
+						this.fillBreadcrumb();
+						this.db.mapMarkerForRestaurant(this.restaurant, this.map);
+					}
+				});
+			};
+		});
+
+
 	}
 
 	/**

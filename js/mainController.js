@@ -119,7 +119,7 @@ MainController.prototype.fillRestaurantsHTML = function(restaurants = this.resta
 	});
 
 	Util.imgLazyLoader('.img-lazy-load');
-	this.addMarkersToMap();
+	if(self.initMap) this.addMarkersToMap();
 };
 
 /**
