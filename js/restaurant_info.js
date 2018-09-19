@@ -1,5 +1,6 @@
 import DBHelper from './dbhelper';
 
+
 export default class RestaurantInfo {
 
 	constructor() {
@@ -11,31 +12,36 @@ export default class RestaurantInfo {
 		 * Initialize Google map, called from HTML.
 		 */
 
-		window.addEventListener('load', (e) => {
-			console.log('All resources finished loading!');
+		// window.addEventListener('load', (e) => {
+		// 	console.log('All resources finished loading!');
 
-			const script = document.createElement('script');
-			script.setAttribute('async', true);
-			script.setAttribute('defer', true);
-			script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCAGI5xQ4PXUpi6HNhM7fwIVzSzTVVJz5E&libraries=places&callback=initMap';
-			document.querySelector('.inside').appendChild(script);
+			// const script = document.createElement('script');
+			// script.setAttribute('async', true);
+			// script.setAttribute('defer', true);
+			// script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCAGI5xQ4PXUpi6HNhM7fwIVzSzTVVJz5E&libraries=places&callback=initMap';
+			// document.querySelector('.inside').appendChild(script);
 
-  		window.initMap = () => {
-				this.fetchRestaurantFromURL((error, restaurant) => {
-					if (error) { // Got an error!
-						console.log(error);
-					} else {
-						this.map = new google.maps.Map(document.getElementById('map'), {
-							zoom: 16,
-							center: restaurant.latlng,
-							scrollwheel: false
-						});
-						this.fillBreadcrumb();
-						this.db.mapMarkerForRestaurant(this.restaurant, this.map);
-					}
-				});
-			};
-		});
+			this.fetchRestaurantFromURL((error, restaurant) => {
+				if (error) { // Got an error!
+					console.log(error);
+				} else {
+					// if(navigator.onLine) {
+						window.initMap = () => {
+							this.map = new google.maps.Map(document.getElementById('map'), {
+								zoom: 16,
+								center: restaurant.latlng,
+								scrollwheel: false
+							});
+
+							this.addMarkersToMap(restaurant);
+						};
+					// }
+
+					requestAnimationFrame(this.fillBreadcrumb);
+				}
+			});
+
+		// });
 
 
 	}
@@ -54,6 +60,7 @@ export default class RestaurantInfo {
 		} else {
 			this.db.fetchRestaurantById(id, (error, restaurant) => {
 				this.restaurant = restaurant;
+
 				if (!restaurant) {
 					console.error(error);
 					return;
@@ -88,7 +95,10 @@ export default class RestaurantInfo {
 			this.fillRestaurantHoursHTML();
 		}
 		// fill reviews
-		this.fillReviewsHTML();
+		this.db.fetchReviews(restaurant.id, (error, reviews) => {
+			if(!error) this.fillReviewsHTML(reviews);
+		})
+
 	};
 
 	/**
@@ -114,7 +124,8 @@ export default class RestaurantInfo {
 	/**
 	 * Create all reviews HTML and add them to the webpage.
 	 */
-	fillReviewsHTML(reviews = this.restaurant.reviews) {
+	fillReviewsHTML(reviews = []) {
+		reviews.reverse();
 		const container = document.getElementById('reviews-container');
 		const title = document.createElement('h3');
 		title.innerHTML = 'Reviews';
@@ -160,7 +171,7 @@ export default class RestaurantInfo {
 	/**
 	 * Add restaurant name to the breadcrumb navigation menu
 	 */
-	fillBreadcrumb(restaurant=this.restaurant) {
+	fillBreadcrumb(restaurant = this.restaurant) {
 		const breadcrumb = document.getElementById('breadcrumb');
 		const li = document.createElement('li');
 		li.innerHTML = restaurant.name;
@@ -185,7 +196,45 @@ export default class RestaurantInfo {
 		return decodeURIComponent(results[2].replace(/\+/g, ' '));
 	};
 
+
+	sendReview() {
+		const formData = {
+			restaurant_id: this.restaurant.id
+		};
+		const formDataFields = document.querySelectorAll(".field");
+		formDataFields.forEach((field) => {
+			formData[field.name] = field.value;
+		});
+
+		this.db.saveReview(formData, (error, status) => {
+			if(!error) {
+				const commentList = document.querySelector('#reviews-list');
+				commentList.prepend(this.createReviewHTML(formData));
+			}
+		});
+	}
+
+
+	/**
+	 * Add markers for current restaurants to the map.
+	 */
+	addMarkersToMap(restaurant) {
+		if(!google) return;
+		const marker = new google.maps.Marker({
+			position: restaurant.latlng,
+			title: restaurant.name,
+			url: `./restaurant.html?id=${restaurant.id}`,
+			map: this.map,
+			animation: google.maps.Animation.DROP}
+		);
+
+			// google.maps.event.addListener(marker, 'click', () => {
+			// 	window.location.href = marker.url;
+			// });
+			// this.markers.push(marker);
+
+	};
+
 }
 
 window.restaurantInfo = new RestaurantInfo();
-

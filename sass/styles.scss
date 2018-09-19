@@ -1,6 +1,10 @@
 @charset "utf-8";
 /* SCSS Document */
 
+* {
+  box-sizing: border-box;
+}
+
 body,td,th,p {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 10pt;
@@ -46,6 +50,14 @@ img {
 
 article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
   display: block;
+}
+
+.visible {
+  visibility: visible;
+}
+
+.hidden {
+  visibility: hidden;
 }
 
 #maincontent {
@@ -174,6 +186,7 @@ nav {
   text-align: center;
 
   li {
+    position: relative;
     display: flex;
     flex-direction: column;
     background-color: #fff;
@@ -195,9 +208,17 @@ nav {
       /*text-transform: uppercase;*/
     }
 
-    a {
-      /*background-color: #9E1900;*/
-      flex: 1;
+    .favorite-icon {
+      position: absolute;
+      right: 24px;
+      bottom: 136px;
+      width: 36px;
+      height: 36px;
+      z-index: 100;
+      will-change: transform;
+    }
+
+    .item-button {
       border: 1px solid #9E1900;
       border-radius: 5px;
       color: #9E1900;
@@ -332,7 +353,7 @@ nav {
 
   #reviews-container {
     padding: 30px 40px 30px;
-    
+
     h3 {
       color: #A35500;
       font-size: 24pt;
@@ -342,14 +363,66 @@ nav {
       padding-bottom: 0px;
       border-bottom: 1px solid #E6E6E6;
     }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      margin: 0;
+      padding: 16px;
+
+      // .form-title {
+      //   color: #A35500;
+      //   font-size: 24pt;
+      //   font-weight: 300;
+      //   letter-spacing: -1px;
+      //   border-bottom: 1px solid #E6E6E6;
+      // }
+
+      .form-row {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding-bottom: 8px;
+
+        input, select, option, textarea {
+          margin: 4px;
+          padding: 8px;
+          border: none;
+          border-radius: 5px;
+          box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.1);
+        }
+
+        input, textarea {
+          flex: 1;
+        }
+      }
+
+      .action-row {
+        display: flex;
+        justify-content: flex-end;
+
+        button {
+          margin: 4px;
+          padding: 8px;
+          color: white;
+          background-color: #bb055c;
+          border: none;
+          border-radius: 5px;
+          box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.1);
+        }
+      }
+
+    }
+
   }
+
 
   #reviews-list {
     display: flex;
     flex-direction: column;
     margin: 0;
     padding: 0;
-    
+
     li {
       flex: 1;
       border-radius: 5px;
@@ -396,12 +469,12 @@ nav {
   color: white;
 }
 
-  
-.show {
+.showSnackbar {
   /*visibility: visible;*/
   display: flex !important;
   animation: fadein 1s, fadeout 1s 5s;
 }
+
 
 @keyframes fadein {
     from {top: -100px; opacity: 0;}

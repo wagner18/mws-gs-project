@@ -1,5 +1,6 @@
 /*eslint-env node*/
 const browserify = require('browserify');
+
 const babelify = require('babelify');
 const buffer = require('vinyl-buffer');
 const source = require('vinyl-source-stream');
@@ -7,6 +8,7 @@ const gulp = require('gulp');
 const sourcemaps = require('gulp-sourcemaps');
 const eslint = require('gulp-eslint');
 const cache = require('gulp-cache');
+const connect = require('gulp-connect');
 const BrowserSync = require('browser-sync').create();
 const sass = require('gulp-sass');
 const autoprefixer = require('gulp-autoprefixer');
@@ -17,28 +19,11 @@ const imagemin = require('gulp-imagemin');
 
 //import gulp from 'gulp';
 
-gulp.task('default', ['dev'], () => {
-	// 'linter', 'clearCache', 'build', 'copy-html', 'images', 'styles'], () => {
-
-	// BrowserSync.init({
-	// 	watch: true,
-	// 	server: './dist',
-	// 	httpModule: 'http2',
-	// 	https: true,
-	// 	port: 8000
-	// });
-
-	// gulp.watch(['sass/**/*.{scss,css}'], ['styles']);
-	// gulp.watch('/index.html', ['copy-html']);
-	// gulp.watch('js/**/*.js', ['linter', 'build']).on('change', BrowserSync.reload);
-	// gulp.watch('dist/index.html').on('change', BrowserSync.reload);
-	// gulp.watch('dist/css/**/*.css').on('change', BrowserSync.reload);
-
-});
+gulp.task('default', ['dev']);
 
 function transpile(file) {
 	return browserify({
-		entries: `./js/${file}`, 
+		entries: `./js/${file}`,
 		debug: true
 	})
 		.transform('babelify', { presets: ['env'] })
@@ -66,6 +51,9 @@ gulp.task('build', [
 
 	transpile('main.js');
 	transpile('restaurant_info.js');
+	transpile('dbhelper.js');
+	transpile('storage.js');
+	transpile('dataWorker.js');
 });
 
 gulp.task('copy-html', () => {
@@ -75,7 +63,7 @@ gulp.task('copy-html', () => {
 
 gulp.task('images', () => {
 	gulp.src('img_resp/**/*')
-		// Set image resizing (1x 2x ratio) 
+		// Set image resizing (1x 2x ratio)
 		.pipe(imagemin([
 			imagemin.gifsicle({interlaced: true}),
 			imagemin.jpegtran({progressive: true}),
@@ -120,7 +108,7 @@ gulp.task('dev', ['build'], () => {
 	BrowserSync.init({
 		watch: true,
 		server: './dist',
-		port: 8000
+		port: 9999
 	});
 
 	gulp.watch(['sass/**/*.{scss,css}'], ['styles']);
@@ -131,20 +119,19 @@ gulp.task('dev', ['build'], () => {
 });
 
 gulp.task('prod', ['build'], () => {
-	BrowserSync.init({
-		server: './dist',
-		codeSync: false,
-		// httpModule: 'http2',
-		// https: true,
-		port: 8080
+	connect.server({
+		name: 'Production simulation',
+		root: './dist',
+		host: '0.0.0.0',
+		port: 9000,
+		livereload: true,
 	});
 });
-
 
 gulp.task('tests', () => {
 	return gulp.src('tests/spec/mainSpec.js')
 		.pipe(jasmine({
-			//integration: true, //BUG
+			//integration: true, // BUG - JUSTMINE
 			vendor: 'js/**/*.js'
 		}));
 });

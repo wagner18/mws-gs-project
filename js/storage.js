@@ -7,7 +7,7 @@ const COLLECTIONS = constants.COLLECTIONS;
 /*
 * Common database helper functions.
 */
-class DBHelper {
+class Storage {
 
 	constructor(){
 		const port = 1337; // Change this to your server port
@@ -21,11 +21,8 @@ class DBHelper {
 	}
 
 
-	// Data storage interfaces \\
-
-	toogleFavorite(id, callback) {
+	toggleFavorite(id, callback) {
 		this.idbCache.getCacheById(COLLECTIONS.RESTAURANTS, id).then((response) => {
-
 			const toogle = response.is_favorite === "true" ? "false" : "true";
 			response.is_favorite = toogle;
 			return this.idbCache.setCache(COLLECTIONS.RESTAURANTS, response).then(() => {
@@ -250,31 +247,20 @@ class DBHelper {
   }
 
 	/**
-	 * Restaurant page URL.
-	 */
-	urlForRestaurant(restaurant) {
-		return (`./restaurant.html?id=${restaurant.id}`);
-	}
-	/**
-	 * Restaurant image URL.
-	 */
-	imageUrlForRestaurant(restaurant, size) {
-		let img = restaurant.photograph;
-		return img ? (`/img/${img}-${size}.jpg`) : '/img/restaurant_placeholder.svg';
-	}
-	/**
 	 * Map marker for a restaurant.
 	 */
 	mapMarkerForRestaurant(restaurant, map) {
+		if(!google) return;
 		const marker = new google.maps.Marker({
 			position: restaurant.latlng,
 			title: restaurant.name,
-			url: this.urlForRestaurant(restaurant),
+			url: `./restaurant.html?id=${restaurant.id}`,
 			map: map,
 			animation: google.maps.Animation.DROP}
 		);
 		return marker;
 	}
+
 
 	handleResponseError(response, type){
 		switch (response.status) {
@@ -290,4 +276,4 @@ class DBHelper {
 }
 
 
-export default DBHelper;
+export default Storage;

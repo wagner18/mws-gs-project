@@ -7,12 +7,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link media="screen" rel="manifest" href="/manifest.json">
-  
+
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/small-screen.css" media="(max-width: 765px)">
   <link rel="stylesheet" href="css/medium-screen.css" media="(min-width: 766px)">
   <link rel="stylesheet" href="css/large-screen.css" media="(min-width: 1024px)">
-  
+
   <title>Restaurant Info</title>
 </head>
 
@@ -41,6 +41,30 @@
     </section>
 
     <section id="reviews-container">
+
+      <form method="post" onsubmit="return false">
+        <!-- <h3 class="form-title">
+          Send your review
+        </h3> -->
+        <div class="form-row">
+          <input class="field" type="text" name="name" required placeholder="Type your name" />
+          <select class="field" name="rating" required>
+            <option value="">Rating</option>
+            <option value="1">1 star</option>
+            <option value="2">2 star</option>
+            <option value="3">3 star</option>
+            <option value="4">4 star</option>
+            <option value="5">5 star</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <textarea class="field" required name="comments" field rows="6" cols="80"></textarea>
+        </div>
+        <div class="action-row">
+          <button onclick="restaurantInfo.sendReview()">Send review</button>
+        </div>
+      </form>
+
       <ul id="reviews-list"></ul>
     </section>
 
@@ -50,8 +74,8 @@
     Copyright (c) 2017 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
   </footer>
 
-  <script defer type="text/javascript" src="js/restaurant_info.js"></script> 
-  <!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCAGI5xQ4PXUpi6HNhM7fwIVzSzTVVJz5E&libraries=places&callback=initMap"></script> -->
+  <script defer type="text/javascript" src="js/restaurant_info.js"></script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCAGI5xQ4PXUpi6HNhM7fwIVzSzTVVJz5E&libraries=places&callback=initMap"></script>
 
 
 </body>
