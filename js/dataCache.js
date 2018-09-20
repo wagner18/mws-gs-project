@@ -16,7 +16,6 @@ export default class DataCache {
 	}
 
 	setDatabase(dbName) {
-		// DAMN THIS LINE!!!!!! if (!navigator.serviceWorker) return Promise.resolve();
 		return IDB.open(dbName, 1, (upgradedDB) => {
 			switch(upgradedDB.oldVersion){
 				case 0:
@@ -45,19 +44,6 @@ export default class DataCache {
 		});
 	}
 
-	// syncDataToApi(path, data) {
-	// 	fetch(this.DATABASE.RESTAURANTS + path, { method: 'PUT' }).then(response => {
-	// 		if (response.status === 200) {
-	// 			response.json().then(data => {
-	// 				// this.cacheItem(data);
-	// 				// console.warn(data);
-	// 			});
-	// 		} else {
-	// 			callback(this.handleResponseError(response, 'api request'), null);
-	// 		}
-	// 	}).catch(error => callback(error, null));
-	// }
-
 
 	cacheData(collection, data = []){
 		 // add post the local DB
@@ -65,7 +51,7 @@ export default class DataCache {
 			const tx = db.transaction(collection, 'readwrite');
 			const readwriteStore = tx.objectStore(collection);
 			data.forEach((item) => readwriteStore.put(item));
-			tx.complete.then(() => console.log('post added to indexedDB'));
+			tx.complete.then(() => console.log('data added to ' + collection));
 		});
 	}
 
@@ -74,7 +60,7 @@ export default class DataCache {
 		return this._IDB.then(db => {
 			const tx = db.transaction(collection, 'readwrite');
 			tx.objectStore(collection).put(data);
-			return tx.complete;
+      return tx.complete.then(() => console.log('data added to ' + collection));
 		});
 	}
 

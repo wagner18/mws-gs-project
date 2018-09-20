@@ -11,11 +11,14 @@ self.addEventListener('install', (event) => {
 		'/restaurant.html',
 		'/js/main.js',
 		'/js/restaurant_info.js',
+		'/js/dataWorker.js',
+		'/js/storage.js',
 		'/css/styles.css',
 		'/css/small-screen.css',
 		'/css/medium-screen.css',
 		'/css/large-screen.css',
 		'https://fonts.gstatic.com/s/roboto/v15/2UX7WLTfW3W8TclTUvlFyQ.woff',
+		// 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCAGI5xQ4PXUpi6HNhM7fwIVzSzTVVJz5E&libraries=places&callback=initMap',
 	];
 
 	event.waitUntil(

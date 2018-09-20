@@ -51,7 +51,6 @@ gulp.task('build', [
 
 	transpile('main.js');
 	transpile('restaurant_info.js');
-	transpile('dbhelper.js');
 	transpile('storage.js');
 	transpile('dataWorker.js');
 });
@@ -124,7 +123,7 @@ gulp.task('prod', ['build'], () => {
 		root: './dist',
 		host: '0.0.0.0',
 		port: 9000,
-		livereload: true,
+		livereload: false,
 	});
 });
 

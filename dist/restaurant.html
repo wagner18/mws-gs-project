@@ -16,7 +16,7 @@
   <title>Restaurant Info</title>
 </head>
 
-<body class="inside">
+<body id="app-inside" class="inside">
   <header>
     <nav>
       <h1><a href="/">Restaurant Reviews</a></h1>
@@ -47,8 +47,8 @@
           Send your review
         </h3> -->
         <div class="form-row">
-          <input class="field" type="text" name="name" required placeholder="Type your name" />
-          <select class="field" name="rating" required>
+          <input class="field" type="text" name="name" required placeholder="Type your name" aria-label="Type your name" />
+          <select class="field" name="rating" required aria-label="Rate the restaurant from 1 to 5 stars">
             <option value="">Rating</option>
             <option value="1">1 star</option>
             <option value="2">2 star</option>
@@ -58,7 +58,7 @@
           </select>
         </div>
         <div class="form-row">
-          <textarea class="field" required name="comments" field rows="6" cols="80"></textarea>
+          <textarea class="field" required name="comments" field rows="6" cols="80" aria-label="Type your review comment"></textarea>
         </div>
         <div class="action-row">
           <button onclick="restaurantInfo.sendReview()">Send review</button>

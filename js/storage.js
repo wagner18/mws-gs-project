@@ -9,7 +9,7 @@ const COLLECTIONS = constants.COLLECTIONS;
 */
 class Storage {
 
-	constructor(){
+	constructor() {
 		const port = 1337; // Change this to your server port
 		// Database URL.
 		this.DATABASE = {
@@ -17,54 +17,13 @@ class Storage {
 			REVIEWS: `http://0.0.0.0:${port}/reviews/`,
 		}
 
+		console.log('\n\n Again!!???');
+
+		this.reloadInterval = 0;
+		this.reloadTimer = Date.now();
+		this.restaurants = [];
 		this.idbCache = new DataCache();
-	}
-
-
-	toggleFavorite(id, callback) {
-		this.idbCache.getCacheById(COLLECTIONS.RESTAURANTS, id).then((response) => {
-			const toogle = response.is_favorite === "true" ? "false" : "true";
-			response.is_favorite = toogle;
-			return this.idbCache.setCache(COLLECTIONS.RESTAURANTS, response).then(() => {
-				callback(null, response);
-				if(!navigator.onLine) {
-					this.idbCache.setSyncAsPending(COLLECTIONS.RESTAURANTS, false);
-				} else {
-					const path = `/${id}/?is_favorite=${toogle}`;
-					return fetch(this.DATABASE.RESTAURANTS + path, { method: 'PUT' }).then((response) => {
-						if (response.status === 200) this.idbCache.setSyncAsPending(COLLECTIONS.RESTAURANTS, true);
-					});
-				}
-			});
-		})
-		.catch((error) => callback(error, null));
-	}
-
-
-	saveReview(data, callback) {
-		if(!navigator.onLine) {
-			return this.idbCache.setCache(COLLECTIONS.UNSYNCED_REVIEWS, data).then(() => {
-				this.idbCache.setSyncAsPending(COLLECTIONS.REVIEWS, false);
-				callback(null, data);
-			}).catch((error) => callback(error, null));
-		} else {
-
-			return fetch(this.DATABASE.REVIEWS, {
-				 method: 'POST',
-				 body: JSON.stringify(data)
-			 })
-			 .then((response) => {
-				if (response.status < 400) {
-					return this.idbCache.setCache(COLLECTIONS.REVIEWS, data).then(() => {
-						callback(null, response);
-						return this.idbCache.setSyncAsPending(COLLECTIONS.REVIEWS, true);
-					});
-				} else {
-					throw new Error(`Error code ${response.status}`);
-				}
-			}).catch((error) => callback(error, null));
-
-		}
+		this.syncDataToApi();
 	}
 
 
@@ -72,25 +31,42 @@ class Storage {
 	 * Fetch all restaurants.
 	 */
 	fetchRestaurants(callback) {
-		this.idbCache.getCacheAll(COLLECTIONS.RESTAURANTS).then(data => {
-			if(data.length > 0) {
-				callback(null, data);
-				console.log('data loaded from local storage!');
-			} else {
+		// Allow reload local data every 5 minutes
+		const isTimeToReload = (Date.now() - this.reloadTimer) > this.reloadInterval ? true : false;
 
-				fetch(this.DATABASE.RESTAURANTS).then(response => {
-					if (response.status === 200) {
-						response.json().then(data => {
-							this.idbCache.cacheData(COLLECTIONS.RESTAURANTS, data);
-							callback(null, data);
-						});
-					} else {
-						callback(this.handleResponseError(response, 'api request'), null);
-					}
-				}).catch(error => callback(error, null));
+		console.log(isTimeToReload, this.restaurants);
 
-			}
-		});
+		if (isTimeToReload && navigator.onLine) {
+			fetch(this.DATABASE.RESTAURANTS).then(response => {
+				if (response.status === 200) {
+					response.json().then(data => {
+						this.restaurants = data;
+						this.reloadInterval = 300;
+						this.idbCache.cacheData(COLLECTIONS.RESTAURANTS, data);
+						callback(null, data);
+						console.log('Local data updated!');
+					});
+				} else {
+					callback(this.handleResponseError(response, 'api request'), null);
+				}
+			}).catch(error => callback(error, null));
+			return;
+		}
+
+		if(this.restaurants.length > 0 ) {
+			callback(null, this.restaurants);
+			return;
+		} else {
+			this.idbCache.getCacheAll(COLLECTIONS.RESTAURANTS).then(data => {
+				if(data.length > 0 ) {
+					this.restaurants = data;
+					callback(null, data);
+					console.log('data loaded from local storage!');
+					return;
+				}
+			});
+		}
+
 	}
 
 	/**
@@ -113,14 +89,14 @@ class Storage {
 			} else {
 
 				// Syced reviews if any unsyced
-				if(unsycedReviews && unsycedReviews.length > 0){
-					unsycedReviews.forEach((review) => {
-						this.saveReview(review, (error, data) => {
-							if(error) console.error(error);
-						});
-					});
-					this.idbCache.clearCache(COLLECTIONS.UNSYNCED_REVIEWS);
-				}
+				// if(unsycedReviews && unsycedReviews.length > 0){
+				// 	unsycedReviews.forEach((review) => {
+				// 		this.saveReview(review, (error, data) => {
+				// 			if(error) console.error(error);
+				// 		});
+				// 	});
+				// 	this.idbCache.clearCache(COLLECTIONS.UNSYNCED_REVIEWS);
+				// }
 
 				const reviewsPath = `?restaurant_id=${id}`;
 				fetch(this.DATABASE.REVIEWS + reviewsPath).then(response => {
@@ -245,6 +221,73 @@ class Storage {
       }
     });
   }
+
+	toggleFavorite(id, callback) {
+		this.idbCache.getCacheById(COLLECTIONS.RESTAURANTS, id).then((response) => {
+			const toogle = response.is_favorite === "true" ? "false" : "true";
+			response.is_favorite = toogle;
+			return this.idbCache.setCache(COLLECTIONS.RESTAURANTS, response).then(() => {
+				callback(null, response);
+				if(!navigator.onLine) {
+					this.idbCache.setSyncAsPending(COLLECTIONS.RESTAURANTS, false);
+				} else {
+					const path = `/${id}/?is_favorite=${toogle}`;
+					return fetch(this.DATABASE.RESTAURANTS + path, { method: 'PUT' }).then((response) => {
+						if (response.status === 200) this.idbCache.setSyncAsPending(COLLECTIONS.RESTAURANTS, true);
+					});
+				}
+			});
+		})
+		.catch((error) => callback(error, null));
+	}
+
+
+	saveReview(data, callback) {
+		if(!navigator.onLine) {
+			return this.idbCache.setCache(COLLECTIONS.UNSYNCED_REVIEWS, data).then(() => {
+				this.idbCache.setSyncAsPending(COLLECTIONS.REVIEWS, false);
+				callback(null, data);
+			}).catch((error) => callback(error, null));
+		} else {
+
+			return fetch(this.DATABASE.REVIEWS, {
+				 method: 'POST',
+				 body: JSON.stringify(data)
+			})
+			.then((response) => {
+				if (response.status < 400) {
+					response.json().then((responseData) => {
+						return this.idbCache.setCache(COLLECTIONS.REVIEWS, responseData).then(() => {
+							callback(null, responseData);
+							return this.idbCache.setSyncAsPending(COLLECTIONS.REVIEWS, true);
+						});
+					});
+				} else {
+					throw new Error(`Error code ${response.status}`);
+				}
+			}).catch((error) => callback(error, null));
+
+		}
+	}
+
+
+	syncDataToApi() {
+		const syncInterval = setInterval(() => {
+			if(!navigator.onLine) return;
+			this.idbCache.getCacheAll(COLLECTIONS.UNSYNCED_REVIEWS).then((unsycedReviews) => {
+				// Syced reviews if any unsyced
+				if(unsycedReviews && unsycedReviews.length > 0){
+					unsycedReviews.forEach((review) => {
+						this.saveReview(review, (error, data) => {
+							if(error) console.error(error);
+						});
+					});
+					console.log('>> Data to synced');
+					this.idbCache.clearCache(COLLECTIONS.UNSYNCED_REVIEWS);
+				} else console.log('>> No data to sync');
+			});
+		}, 3000);
+	}
 
 	/**
 	 * Map marker for a restaurant.
