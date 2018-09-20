@@ -87,17 +87,11 @@ export default class RestaurantInfo {
 		if (restaurant.operating_hours) {
 			this.fillRestaurantHoursHTML();
 		}
-		// fill reviews
 
 		this.postMessage({
 			action: 'fetchReviews',
 			input: {id: parseInt(restaurant.id)}
 		});
-
-		// this.db.fetchReviews(restaurant.id, (error, reviews) => {
-		// 	if(!error) this.fillReviewsHTML(reviews);
-		// })
-
 	};
 
 	/**
@@ -153,7 +147,8 @@ export default class RestaurantInfo {
 		li.appendChild(name);
 
 		const date = document.createElement('p');
-		date.innerHTML = review.date;
+		const createdAt = new Date(review.createdAt);
+		date.innerHTML = createdAt.toDateString();
 		li.appendChild(date);
 
 		const rating = document.createElement('p');
@@ -213,13 +208,6 @@ export default class RestaurantInfo {
 			action: 'saveReview',
 			input: {data: formData}
 		});
-
-		// this.db.saveReview(formData, (error, status) => {
-		// 	if(!error) {
-		// 		const commentList = document.querySelector('#reviews-list');
-		// 		commentList.prepend(this.createReviewHTML(formData));
-		// 	}
-		// });
 	}
 
 	/**

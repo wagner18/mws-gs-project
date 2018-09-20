@@ -19,7 +19,7 @@ const imagemin = require('gulp-imagemin');
 
 //import gulp from 'gulp';
 
-gulp.task('default', ['dev']);
+gulp.task('default', ['prod']);
 
 function transpile(file) {
 	return browserify({
@@ -107,7 +107,7 @@ gulp.task('dev', ['build'], () => {
 	BrowserSync.init({
 		watch: true,
 		server: './dist',
-		port: 9999
+		port: 9001
 	});
 
 	gulp.watch(['sass/**/*.{scss,css}'], ['styles']);

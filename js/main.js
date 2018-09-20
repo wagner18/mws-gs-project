@@ -1,6 +1,5 @@
 import MainController from './mainController';
 
-// window.dataWorker = new Worker('./js/dataWorker.js');
 var map;
 
 export function Main() {

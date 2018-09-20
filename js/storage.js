@@ -17,8 +17,6 @@ class Storage {
 			REVIEWS: `http://0.0.0.0:${port}/reviews/`,
 		}
 
-		console.log('\n\n Again!!???');
-
 		this.reloadInterval = 0;
 		this.reloadTimer = Date.now();
 		this.restaurants = [];
@@ -34,8 +32,6 @@ class Storage {
 		// Allow reload local data every 5 minutes
 		const isTimeToReload = (Date.now() - this.reloadTimer) > this.reloadInterval ? true : false;
 
-		console.log(isTimeToReload, this.restaurants);
-
 		if (isTimeToReload && navigator.onLine) {
 			fetch(this.DATABASE.RESTAURANTS).then(response => {
 				if (response.status === 200) {
@@ -44,7 +40,6 @@ class Storage {
 						this.reloadInterval = 300;
 						this.idbCache.cacheData(COLLECTIONS.RESTAURANTS, data);
 						callback(null, data);
-						console.log('Local data updated!');
 					});
 				} else {
 					callback(this.handleResponseError(response, 'api request'), null);
@@ -61,7 +56,6 @@ class Storage {
 				if(data.length > 0 ) {
 					this.restaurants = data;
 					callback(null, data);
-					console.log('data loaded from local storage!');
 					return;
 				}
 			});
@@ -276,15 +270,14 @@ class Storage {
 			if(!navigator.onLine) return;
 			this.idbCache.getCacheAll(COLLECTIONS.UNSYNCED_REVIEWS).then((unsycedReviews) => {
 				// Syced reviews if any unsyced
-				if(unsycedReviews && unsycedReviews.length > 0){
+				if(unsycedReviews && unsycedReviews.length > 0) {
 					unsycedReviews.forEach((review) => {
 						this.saveReview(review, (error, data) => {
 							if(error) console.error(error);
 						});
 					});
-					console.log('>> Data to synced');
 					this.idbCache.clearCache(COLLECTIONS.UNSYNCED_REVIEWS);
-				} else console.log('>> No data to sync');
+				}
 			});
 		}, 3000);
 	}

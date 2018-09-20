@@ -51,7 +51,7 @@ export default class DataCache {
 			const tx = db.transaction(collection, 'readwrite');
 			const readwriteStore = tx.objectStore(collection);
 			data.forEach((item) => readwriteStore.put(item));
-			tx.complete.then(() => console.log('data added to ' + collection));
+			return tx.complete;
 		});
 	}
 
@@ -60,7 +60,7 @@ export default class DataCache {
 		return this._IDB.then(db => {
 			const tx = db.transaction(collection, 'readwrite');
 			tx.objectStore(collection).put(data);
-      return tx.complete.then(() => console.log('data added to ' + collection));
+      return tx.complete;
 		});
 	}
 
